@@ -167,9 +167,9 @@ window.TRIP = {
     '2027-04-17': '🎪', '2027-04-18': '🐒', '2027-04-19': '🏝️', '2027-04-20': '🛝', '2027-04-21': '🐠', '2027-04-22': '🏠'
   },
 
-  // Free Unsplash photos (ids after "photo-"). Hotels and restaurants are illustrations, not the actual place.
+  // Free Unsplash photos (ids after "photo-"), or a path to a file in img/. Hotels and restaurants are illustrations, not the actual place.
   photos: {
-    samui: '1537956965359-7573183d1f57', khaolak: '1545153976-5d451256a9a1', phuket: '1605045544284-d13c6d6a60a6',
+    samui: '1537956965359-7573183d1f57', khaolak: 'img/khaolak.jpg', phuket: '1605045544284-d13c6d6a60a6',
     melati: '1596178067639-5c6e68aea6dc', kalima: '1728048756938-de1ccee0ab15', angsana: '1623718649591-311775a30c43',
     foodHero: '1582801205465-c0d029e85a1c'
   },
