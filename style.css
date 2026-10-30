@@ -1,0 +1,334 @@
+/* Thailand 27 – Andaman palette and longtail-boat lettering.
+   One bold thing: the photo hero with the painted-hull headline. Everything else stays quiet:
+   no card shadows, no scroll animations, color only to tell the three destinations apart. */
+
+:root {
+  --sea: #08313d;        /* deep Andaman water: text, dark surfaces */
+  --sea-2: #4a6a72;      /* secondary text */
+  --lagoon: #0e9aa1;     /* Koh Samui, links */
+  --jungle: #2c8456;     /* Khao Lak */
+  --ribbon: #d93d74;     /* Phuket: the pink ribbons on the boat prows */
+  --marigold: #f0a316;   /* garlands: highlights */
+  --mist: #ecf5f5;       /* alternate surface */
+  --paper: #ffffff;
+  --line: rgba(8, 49, 61, .14);
+  --michelin: #c8262d;
+  --display: 'Suez One', 'Assistant', serif;
+  --body: 'Assistant', -apple-system, 'Segoe UI', Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sea: #e6f2f2; --sea-2: #9fbcc1; --mist: #0b2d36; --paper: #06222a;
+    --line: rgba(230, 242, 242, .14); --lagoon: #3cc6cc; --jungle: #4fbf83; --ribbon: #ff6b9b;
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--sea); font-family: var(--body); font-size: 18px; line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: var(--lagoon); }
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid var(--marigold); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+.hidden { display: none !important; }
+bdi { unicode-bidi: isolate; }
+
+/* NAV: transparent over the photo, solid once scrolled */
+.nav { position: fixed; inset: 0 0 auto 0; z-index: 50; transition: background .3s, box-shadow .3s; }
+.nav.scrolled { background: var(--paper); box-shadow: 0 1px 0 var(--line); }
+.nav-inner { max-width: 1040px; margin: 0 auto; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.brand { font-family: var(--display); font-size: 21px; text-decoration: none; color: #fff; }
+.links { display: flex; gap: 22px; overflow-x: auto; scrollbar-width: none; }
+.links::-webkit-scrollbar { display: none; }
+.links a { color: rgba(255, 255, 255, .9); text-decoration: none; font-size: 15px; font-weight: 600; white-space: nowrap; }
+.nav.scrolled .brand { color: var(--sea); }
+.nav.scrolled .links a { color: var(--sea-2); }
+.nav.scrolled .links a:hover { color: var(--sea); }
+.nav:not(.scrolled) .brand, .nav:not(.scrolled) .links a { text-shadow: 0 1px 10px rgba(0, 0, 0, .35); }
+
+/* HERO */
+.hero { position: relative; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; color: #fff; background: #0b4a5c; }
+.hero-bg { position: absolute; inset: -3%; background: url('https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=2400&q=80&auto=format&fit=crop') 60% 40% / cover no-repeat; animation: drift 40s ease-in-out infinite alternate; }
+@keyframes drift { from { transform: scale(1); } to { transform: scale(1.07) translate(-1.2%, -.8%); } }
+.hero::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg, rgba(3, 30, 40, .4) 0%, rgba(3, 30, 40, 0) 26%, rgba(3, 30, 40, .08) 52%, rgba(3, 26, 36, .78) 100%); }
+.hero-inner { position: relative; z-index: 1; width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 24px 9vh; }
+.kicker { margin: 0 0 10px; font-size: 18px; font-weight: 700; letter-spacing: .01em; }
+h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(68px, 13vw, 156px); line-height: .92; letter-spacing: -.01em; text-shadow: 0 6px 40px rgba(0, 25, 35, .35); }
+.lead { margin: 22px 0 0; max-width: 34ch; font-size: clamp(19px, 2.3vw, 24px); line-height: 1.4; font-weight: 500; text-shadow: 0 1px 14px rgba(0, 0, 0, .4); }
+.countdown { display: inline-block; margin: 28px 0 0; padding: 10px 20px; border-radius: 999px; font-size: 17px; font-weight: 600;
+  background: rgba(255, 255, 255, .16); border: 1px solid rgba(255, 255, 255, .32); backdrop-filter: blur(14px) saturate(150%); -webkit-backdrop-filter: blur(14px) saturate(150%); }
+.countdown b { font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--marigold); font-variant-numeric: tabular-nums; }
+.cd-label { margin: 10px 0 0; font-size: 20px; font-weight: 700; }
+.cd-label:empty { display: none; }
+.photo-credit { position: absolute; z-index: 1; bottom: 12px; left: 16px; font-size: 12px; color: rgba(255, 255, 255, .7); text-decoration: none; }
+/* the one orchestrated moment: the headline settles in on load */
+.hero-inner > * { animation: rise 1s cubic-bezier(.2, .7, .2, 1) both; }
+.hero-inner > :nth-child(2) { animation-delay: .08s; }
+.hero-inner > :nth-child(3) { animation-delay: .18s; }
+.hero-inner > :nth-child(4) { animation-delay: .28s; }
+@keyframes rise { from { opacity: 0; transform: translateY(24px); } }
+
+/* SECTIONS */
+.section { padding: 96px 0; }
+.section + .section { border-top: 1px solid var(--line); }
+h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(40px, 6vw, 64px); line-height: 1.05; }
+.sub { margin: 14px 0 0; max-width: 60ch; font-size: 20px; color: var(--sea-2); }
+.note { margin: 10px 0 0; color: var(--sea-2); font-size: 17px; max-width: 70ch; }
+.h3 { margin: 64px 0 18px; font-family: var(--display); font-weight: 400; font-size: 30px; }
+
+/* ROUTE: three stops on one sea line */
+.journey { list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 32px; position: relative; }
+.journey::before { content: ''; position: absolute; top: 13px; right: 14px; left: 14px; border-top: 3px dashed var(--line); }
+.stop { position: relative; display: block; text-decoration: none; color: inherit; padding-top: 48px; }
+.stop::before { content: attr(data-n); position: absolute; top: 0; right: 0; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 15px; color: #fff; background: var(--c); box-shadow: 0 0 0 6px var(--paper); }
+.stop.samui { --c: var(--lagoon); } .stop.khaolak { --c: var(--jungle); } .stop.phuket { --c: var(--ribbon); }
+.stop h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 44px; line-height: 1; color: var(--c); }
+.stop .dates { display: block; margin-top: 8px; font-weight: 700; }
+.stop .nights { color: var(--sea-2); font-weight: 600; }
+.stop p { margin: 10px 0 0; color: var(--sea-2); font-size: 17px; max-width: 30ch; }
+.stop .go { display: inline-block; margin-top: 12px; font-weight: 700; color: var(--c); }
+.stop:hover h3 { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
+/* centered on the dashed segment between the previous stop's dot and this one's */
+.leg { position: absolute; top: 3px; right: calc(-50% - 16px); font-size: 14px; font-weight: 700; color: var(--sea-2); background: var(--paper); padding: 0 8px; transform: translateX(50%); }
+
+/* TABS */
+.tabs { display: flex; gap: 8px; margin: 44px 0 8px; flex-wrap: wrap; }
+.tab { font: inherit; font-size: 17px; font-weight: 700; padding: 9px 20px; border-radius: 999px; border: 2px solid var(--c); background: transparent; color: var(--c); cursor: pointer; }
+.tab.on { background: var(--c); color: #fff; }
+.tab[data-stop="samui"] { --c: var(--lagoon); } .tab[data-stop="khaolak"] { --c: var(--jungle); } .tab[data-stop="phuket"] { --c: var(--ribbon); }
+
+/* DAYS: an itinerary line, not a stack of cards */
+.days { position: relative; margin-top: 28px; }
+.day { --c: var(--lagoon); position: relative; display: grid; grid-template-columns: 112px 1fr; gap: 28px; padding: 26px 0 30px; border-bottom: 1px solid var(--line); }
+.day.khaolak { --c: var(--jungle); } .day.phuket { --c: var(--ribbon); }
+.day:last-child { border-bottom: 0; }
+.date b { display: block; font-family: var(--display); font-weight: 400; font-size: 54px; line-height: 1; color: var(--c); }
+.date span { display: block; margin-top: 6px; font-weight: 700; color: var(--sea-2); }
+.day h4 { margin: 4px 0 12px; font-size: 25px; font-weight: 800; line-height: 1.2; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.badge { font-size: 13px; font-weight: 800; color: #fff; background: var(--lagoon); padding: 3px 10px; border-radius: 999px; }
+.row { display: grid; grid-template-columns: 82px 1fr; gap: 12px; padding: 5px 0; font-size: 17px; }
+.row .k { font-weight: 800; font-size: 15px; color: var(--c); padding-top: 2px; }
+.row a { color: inherit; text-decoration: underline; text-decoration-color: var(--c); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.day.is-today { background: linear-gradient(90deg, transparent, var(--mist) 20%); }
+.day.is-today .date span::after { content: ' · היום'; color: var(--marigold); }
+.today { padding: 96px 0 0; }
+.h-today { font-family: var(--display); font-weight: 400; font-size: 34px; margin: 0; color: var(--marigold); }
+
+/* FOOD inside a day */
+.food { margin-top: 12px; }
+.food summary { cursor: pointer; display: inline-flex; align-items: baseline; gap: 6px; list-style: none; font-weight: 800; font-size: 16px; color: var(--sea); background: var(--mist); padding: 7px 14px; border-radius: 999px; }
+.food summary::-webkit-details-marker { display: none; }
+.food summary::after { content: '+'; font-weight: 800; color: var(--c); margin-inline-start: 4px; }
+.food[open] summary::after { content: '−'; }
+.food summary bdi { font-weight: 600; color: var(--sea-2); }
+.fi { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 16px 0 6px; font-size: 16px; }
+.fi + .fi { border-top: 1px dashed var(--line); }
+.fi .when { font-weight: 800; font-size: 14px; color: var(--sea-2); padding-top: 3px; }
+.fi .rest { font-size: 19px; }
+.fi small { display: block; color: var(--sea-2); font-size: 14px; margin: 1px 0 6px; }
+.fi p { margin: 4px 0; }
+.fi em { font-style: normal; font-weight: 800; margin-inline-end: 6px; }
+.fi .fav em { color: #b37400; }
+.fi .kids em { color: var(--jungle); }
+@media (prefers-color-scheme: dark) { .fi .fav em { color: var(--marigold); } }
+.fi .alt { color: var(--sea-2); font-size: 15px; }
+.fi .links { display: flex; gap: 18px; margin-top: 8px; }
+.fi .links a { font-weight: 700; font-size: 15px; text-decoration: none; }
+.mich { display: inline-block; vertical-align: 2px; margin-inline-start: 8px; font-size: 11px; font-weight: 800; letter-spacing: .04em; color: #fff; background: var(--michelin); padding: 2px 7px; border-radius: 4px; }
+
+/* FOOD SECTION */
+.food-sec { background: var(--mist); }
+.food-sec + .section { border-top: 0; }
+.picks { list-style: none; margin: 0; padding: 0; }
+.picks li { display: grid; grid-template-columns: 110px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.picks .when b { display: block; font-family: var(--display); font-weight: 400; font-size: 30px; line-height: 1; color: var(--c); }
+.picks .when span { font-size: 15px; font-weight: 700; color: var(--sea-2); }
+.picks li.samui { --c: var(--lagoon); } .picks li.khaolak { --c: var(--jungle); } .picks li.phuket { --c: var(--ribbon); }
+.picks a { color: var(--sea); text-decoration: none; font-size: 22px; font-weight: 800; }
+.picks a:hover { text-decoration: underline; }
+.picks .special { display: inline-block; vertical-align: 2px; margin-inline-start: 8px; font-size: 12px; font-weight: 800; color: var(--sea); background: var(--marigold); padding: 2px 8px; border-radius: 4px; }
+.picks p { margin: 4px 0 0; color: var(--sea-2); font-size: 17px; }
+/* the dish dictionary reads like a printed menu */
+.menu { list-style: none; margin: 18px 0 0; padding: 0; columns: 2; column-gap: 56px; }
+.menu li { break-inside: avoid; padding: 14px 0; border-bottom: 1px dotted var(--line); }
+.menu a { color: inherit; text-decoration: none; display: block; }
+.menu .dn { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.menu b { font-size: 20px; font-weight: 800; }
+.menu i { font-style: normal; font-size: 15px; font-weight: 600; color: var(--lagoon); direction: ltr; }
+.menu p { margin: 2px 0 0; color: var(--sea-2); font-size: 16px; }
+.menu a:hover b { text-decoration: underline; text-decoration-color: var(--marigold); text-decoration-thickness: 3px; }
+.food-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 64px; }
+.seder { padding: 30px 32px; border-radius: 22px; background: var(--sea); color: var(--paper); }
+@media (prefers-color-scheme: dark) { .seder { background: #0e3f4c; color: #e6f2f2; } }
+.seder h3, .ftips h3 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 30px; }
+.seder-date { margin: 2px 0 14px; color: var(--marigold); font-weight: 700; }
+.seder ul, .ftips ul { margin: 0; padding-right: 20px; display: grid; gap: 8px; font-size: 17px; }
+.seder a { color: var(--marigold); }
+.ftips h3 { margin-bottom: 14px; }
+.ftips li b { color: var(--sea); }
+
+/* HOTELS: a window you want to jump into */
+.hotels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+.hotel { --c: var(--lagoon); display: flex; flex-direction: column; }
+.hotel.khaolak { --c: var(--jungle); } .hotel.phuket { --c: var(--ribbon); }
+.hotel-photo { position: relative; aspect-ratio: 4 / 5; border-radius: 22px; overflow: hidden; background: var(--mist); }
+.hotel-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.6s cubic-bezier(.2, .7, .2, 1); }
+.hotel:hover .hotel-photo img, .hotel:focus-within .hotel-photo img { transform: scale(1.12); }
+.hotel-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(3, 26, 36, .82)); }
+.hotel-over { position: absolute; z-index: 1; inset: auto 0 0 0; padding: 22px; color: #fff; }
+.hotel-over .where { font-weight: 800; color: var(--marigold); }
+.hotel-over h3 { margin: 4px 0 0; font-size: 27px; line-height: 1.12; font-weight: 800; }
+.illus { position: absolute; z-index: 1; top: 12px; left: 12px; font-size: 12px; font-weight: 700; color: #fff; background: rgba(0, 0, 0, .35); padding: 2px 9px; border-radius: 999px; }
+.hotel-body { padding: 18px 4px 0; display: flex; flex-direction: column; flex: 1; }
+.hotel .unit { margin: 0 0 12px; font-weight: 700; }
+.hotel ul { margin: 0 0 18px; padding-right: 18px; display: grid; gap: 6px; font-size: 17px; color: var(--sea-2); }
+.hotel li::marker { color: var(--c); }
+.hotel-links { margin: auto 0 0; display: flex; gap: 20px; }
+.hotel-links a { font-weight: 800; color: var(--c); text-decoration: none; }
+.hotel-links a:hover { text-decoration: underline; }
+
+/* PHOTOS ELSEWHERE */
+.stop-photo { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 16px; margin: 0 0 16px; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+.stop:hover .stop-photo { transform: scale(1.03) rotate(-.6deg); }
+.stop-banner { --c: var(--lagoon); position: relative; height: clamp(220px, 34vw, 380px); margin: 20px 0 6px; border-radius: 24px; background: var(--mist) center / cover no-repeat; overflow: hidden; display: flex; align-items: flex-end; transition: background-image .4s; }
+.stop-banner.khaolak { --c: var(--jungle); } .stop-banner.phuket { --c: var(--ribbon); }
+.stop-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 40%, rgba(3, 26, 36, .7)); }
+.stop-banner div { position: relative; z-index: 1; padding: 24px 28px; color: #fff; }
+.stop-banner b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(44px, 7vw, 76px); line-height: 1; }
+.stop-banner span { font-weight: 700; font-size: 18px; }
+.stop-banner { animation: bannerIn .7s cubic-bezier(.2, .7, .2, 1); }
+@keyframes bannerIn { from { opacity: .3; transform: scale(.985); } }
+.food-hero { height: clamp(220px, 32vw, 380px); margin: -96px 0 56px; background: center 60% / cover no-repeat; position: relative; }
+.food-hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, var(--mist)); }
+.fphoto { position: relative; margin: 6px 0 12px; border-radius: 16px; overflow: hidden; aspect-ratio: 16 / 9; max-width: 560px; background: var(--mist); }
+.fphoto img { width: 100%; height: 100%; object-fit: cover; animation: foodIn .8s cubic-bezier(.2, .7, .2, 1); }
+@keyframes foodIn { from { transform: scale(1.15); opacity: 0; } }
+.fphoto figcaption { position: absolute; top: 10px; left: 10px; font-size: 12px; font-weight: 700; color: #fff; background: rgba(0, 0, 0, .35); padding: 2px 9px; border-radius: 999px; }
+.picks li { grid-template-columns: 96px 110px 1fr; align-items: center; }
+.pick-photo { width: 96px; height: 96px; object-fit: cover; border-radius: 18px; transition: transform .4s cubic-bezier(.2, .8, .3, 1.4); }
+.picks li:hover .pick-photo { transform: scale(1.1) rotate(-3deg); }
+.credits { font-size: 12px; opacity: .8; max-width: 80ch; margin: 10px auto 0; }
+
+/* DAY STICKERS */
+.sticker { display: grid; place-items: center; width: 64px; height: 64px; margin-bottom: 10px; border: 0; border-radius: 50%; font-size: 36px; line-height: 1; cursor: pointer;
+  background: color-mix(in srgb, var(--c) 16%, var(--paper)); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--c) 40%, transparent); transform: rotate(-6deg); transition: transform .25s cubic-bezier(.2, .8, .3, 1.6); }
+.sticker:hover { transform: rotate(6deg) scale(1.12); }
+.sticker.pop { animation: pop .6s cubic-bezier(.2, .8, .3, 1.6); }
+@keyframes pop { 30% { transform: scale(1.35) rotate(-14deg); } 60% { transform: scale(.92) rotate(10deg); } }
+.burst { position: fixed; z-index: 90; pointer-events: none; font-size: 26px; transform: translate(-50%, -50%); animation: burst .9s cubic-bezier(.15, .7, .3, 1) forwards; }
+@keyframes burst { to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.5) rotate(40deg); opacity: 0; } }
+
+/* FAMILY */
+.family { display: flex; flex-wrap: wrap; gap: 14px 40px; margin-top: 24px; font-size: 21px; }
+.family p { margin: 0; }
+.family b { font-family: var(--display); font-weight: 400; font-size: 26px; }
+
+/* CHECKLIST */
+.checklist { list-style: none; margin: 30px 0 0; padding: 0; max-width: 760px; }
+.checklist li { border-bottom: 1px solid var(--line); }
+.checklist label { display: flex; align-items: center; gap: 16px; padding: 15px 0; cursor: pointer; font-size: 18px; }
+.checklist input { appearance: none; -webkit-appearance: none; flex: none; width: 26px; height: 26px; margin: 0; border-radius: 8px; border: 2px solid var(--sea-2); display: grid; place-items: center; cursor: pointer; }
+.checklist input:checked { background: var(--jungle); border-color: var(--jungle); }
+.checklist input:checked::after { content: '✓'; color: #fff; font-weight: 900; font-size: 15px; }
+.checklist input:checked + span { color: var(--sea-2); text-decoration: line-through; }
+
+/* TIPS */
+.tips { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 56px; margin: 30px 0 0; }
+.tips dt { font-family: var(--display); font-size: 24px; color: var(--lagoon); }
+.tips dd { margin: 4px 0 0; color: var(--sea-2); }
+
+.foot { padding: 40px 0 130px; text-align: center; color: var(--sea-2); font-size: 15px; border-top: 1px solid var(--line); }
+
+/* KOKO, the AI bubble */
+.ai-fab { position: fixed; z-index: 60; left: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 10px; padding: 6px 18px 6px 8px; border: 0; border-radius: 999px; background: var(--paper); color: var(--sea); font: inherit; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 8px 30px rgba(8, 49, 61, .22); transition: transform .25s; }
+.ai-fab:hover { transform: scale(1.04); }
+.ai-fab.open { transform: scale(0); }
+.monkey { width: 46px; height: 46px; flex: none; overflow: visible; }
+.monkey .m-head { transform-origin: 32px 40px; animation: bob 2.8s ease-in-out infinite; }
+.monkey .m-nut { transform-origin: 50px 50px; animation: toss 2.8s cubic-bezier(.3, .7, .4, 1) infinite; }
+.monkey .m-eyes { transform-origin: 32px 27px; animation: blink 4.6s infinite; }
+.ai-fab:hover .m-head { animation-duration: .7s; }
+/* Koko's moods: oo (ooh-ooh), sleep (Zzz), wave (hello) – switched by app.js */
+.monkey .m-closed, .monkey .m-oo, .monkey .m-hand { opacity: 0; }
+.monkey .m-hand { transform-origin: 15px 54px; }
+.ai-fab.is-oo .m-smile { opacity: 0; }
+.ai-fab.is-oo .m-oo { opacity: 1; transform-origin: 32px 36px; animation: oo .22s ease-in-out 6 alternate; }
+@keyframes oo { to { transform: scale(1.35, .8); } }
+.ai-fab.is-oo .m-head { animation: hop .44s ease-in-out 3; }
+@keyframes hop { 50% { transform: translateY(-4px) rotate(-4deg); } }
+.ai-fab.is-sleep .m-eyes { opacity: 0; }
+.ai-fab.is-sleep .m-closed { opacity: 1; }
+.ai-fab.is-sleep .m-head { animation: snooze 3s ease-in-out infinite; transform-origin: 32px 46px; }
+@keyframes snooze { 0%, 100% { transform: rotate(14deg) translateY(2px); } 50% { transform: rotate(18deg) translateY(3px); } }
+.ai-fab.is-sleep .m-nut { animation: none; }
+.ai-fab.is-wave .m-hand { opacity: 1; animation: wave .3s ease-in-out 8 alternate; }
+@keyframes wave { from { transform: rotate(-22deg); } to { transform: rotate(18deg); } }
+.ai-say { position: absolute; bottom: calc(100% + 8px); left: 6px; padding: 5px 12px; border-radius: 14px 14px 14px 4px; background: var(--paper); color: var(--sea); font-size: 15px; font-weight: 800; white-space: nowrap; box-shadow: 0 6px 20px rgba(8, 49, 61, .2); opacity: 0; transform: translateY(6px) scale(.8); transform-origin: bottom left; transition: opacity .2s, transform .25s cubic-bezier(.2, .9, .3, 1.4); pointer-events: none; }
+.ai-say.show { opacity: 1; transform: none; }
+.ai-fab.is-sleep .ai-say.show { animation: zzz 2.4s ease-in-out infinite; }
+@keyframes zzz { 50% { transform: translateY(-5px); } }
+@keyframes bob { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg) translateY(-1px); } }
+@keyframes toss { 0%, 55%, 100% { transform: translate(0, 0) rotate(0); } 70% { transform: translate(-6px, -22px) rotate(-200deg); } 85% { transform: translate(0, 2px) rotate(-360deg); } }
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+.ai-panel { position: fixed; z-index: 70; left: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); width: 390px; max-width: calc(100vw - 40px); height: 580px; max-height: calc(100svh - 110px); display: flex; flex-direction: column; border-radius: 24px; background: var(--paper); box-shadow: 0 24px 70px rgba(8, 49, 61, .3); border: 1px solid var(--line); overflow: hidden; transform-origin: bottom left; transform: scale(.6); opacity: 0; pointer-events: none; transition: transform .35s cubic-bezier(.2, .9, .25, 1.1), opacity .25s; }
+.ai-panel.open { transform: none; opacity: 1; pointer-events: auto; }
+.ai-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--sea); color: var(--paper); }
+.ai-title { display: flex; align-items: center; gap: 10px; }
+.ai-mini { font-size: 26px; line-height: 1; }
+.ai-title b { display: block; font-size: 17px; }
+.ai-title small { display: block; font-size: 13px; opacity: .8; }
+.ai-close { border: 0; background: rgba(255, 255, 255, .15); color: inherit; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 14px; }
+.ai-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.msg { max-width: 85%; padding: 10px 14px; border-radius: 18px; font-size: 16px; line-height: 1.45; white-space: pre-wrap; }
+.msg.me { align-self: flex-start; background: var(--lagoon); color: #fff; border-bottom-right-radius: 6px; }
+.msg.bot { align-self: flex-end; background: var(--mist); border-bottom-left-radius: 6px; }
+.msg.typing { color: var(--sea-2); }
+.ai-chips { display: flex; gap: 8px; padding: 0 16px 10px; overflow-x: auto; scrollbar-width: none; }
+.ai-chips button { flex: none; border: 1px solid var(--line); background: var(--paper); color: var(--sea); font: inherit; font-size: 14px; font-weight: 600; padding: 7px 12px; border-radius: 999px; cursor: pointer; }
+.ai-form { display: flex; gap: 8px; padding: 10px 12px 14px; border-top: 1px solid var(--line); }
+.ai-form input { flex: 1; min-width: 0; border: 1px solid var(--line); background: var(--mist); color: var(--sea); font: inherit; font-size: 16px; padding: 11px 16px; border-radius: 999px; outline: none; }
+.ai-form input:focus { border-color: var(--lagoon); }
+.ai-form button { width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--lagoon); color: #fff; font-size: 20px; font-weight: 800; cursor: pointer; }
+
+/* RESPONSIVE */
+@media (max-width: 860px) {
+  .journey { grid-template-columns: 1fr; gap: 34px; }
+  .journey::before { top: 14px; bottom: 14px; right: 14px; left: auto; border-top: 0; border-right: 3px dashed var(--line); }
+  .stop { padding: 0 52px 0 0; }
+  .leg { display: none; }
+  .hotels { grid-template-columns: 1fr; gap: 40px; }
+  .hotel-photo { aspect-ratio: 4 / 3; }
+  .food-bottom { grid-template-columns: 1fr; gap: 36px; }
+  .menu { columns: 1; }
+  .tips { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  body { font-size: 17px; }
+  .wrap, .nav-inner, .hero-inner { padding-left: 18px; padding-right: 18px; }
+  .brand { display: none; }
+  .links { gap: 16px; }
+  .section { padding: 72px 0; }
+  .sub { font-size: 18px; }
+  .hero-bg { background-position: 74% 40%; }
+  .hero-inner { padding-bottom: 12vh; }
+  .countdown { font-size: 15px; padding: 9px 16px; }
+  .photo-credit { left: auto; right: 16px; }
+  .day { grid-template-columns: 1fr; gap: 4px; }
+  .date { display: flex; align-items: baseline; gap: 12px; }
+  .date b { font-size: 40px; }
+  .row, .fi { grid-template-columns: 1fr; gap: 0; }
+  .picks li { grid-template-columns: 76px 1fr; gap: 4px 14px; }
+  .pick-photo { width: 76px; height: 76px; grid-row: span 2; }
+  .food-hero { margin-top: -72px; }
+  .sticker { width: 52px; height: 52px; font-size: 30px; margin: 0; }
+  .picks .when { display: flex; align-items: baseline; gap: 10px; }
+  .family { flex-direction: column; }
+  .ai-fab-text { display: none; }
+  .ai-fab { padding: 6px; }
+  .ai-panel { left: 10px; right: 10px; width: auto; max-width: none; bottom: 10px; height: calc(100svh - 80px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-bg, .hero-inner > *, .stop-banner, .fphoto img, .sticker, .monkey .m-head, .monkey .m-nut { animation: none !important; }
+  .hotel-photo img, .stop-photo, .pick-photo { transition: none; }
+}
