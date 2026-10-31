@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Suez+One&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=12">
+<link rel="stylesheet" href="style.css?v=13">
 </head>
 <body>
 
@@ -26,6 +26,7 @@
       <a href="#hotels">מלונות</a>
       <a href="#book">להזמין</a>
     </nav>
+    <button class="docs-btn" id="docs-btn" type="button" aria-haspopup="dialog" aria-label="מסמכי הטיול" title="מסמכי הטיול">📂</button>
   </div>
 </header>
 
@@ -193,8 +194,18 @@
   </form>
 </div>
 
+<div class="docs" id="docs" role="dialog" aria-modal="true" aria-label="מסמכי הטיול" aria-hidden="true">
+  <div class="docs-card">
+    <div class="ai-head">
+      <div class="ai-title"><span class="ai-mini" aria-hidden="true">📂</span><div><b>מסמכי הטיול</b><small>כרטיסי טיסה ואישורי מלונות, נעולים בקוד המשפחה</small></div></div>
+      <button class="ai-close" id="docs-close" aria-label="סגירה">✕</button>
+    </div>
+    <div class="docs-body" id="docs-body"></div>
+  </div>
+</div>
+
 <!-- Bump ?v= on each update so phones don't keep an old copy. -->
-<script src="data.js?v=12"></script>
-<script src="app.js?v=12"></script>
+<script src="data.js?v=13"></script>
+<script src="app.js?v=13"></script>
 </body>
 </html>

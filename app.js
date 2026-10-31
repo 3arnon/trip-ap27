@@ -408,6 +408,93 @@
     try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
   });
 
+  // DOCUMENTS: the 📂 in the nav. The files live on the assistant's worker and come back only with
+  // the family code (the same code Koko asks for, kept under the same key on this device).
+  const docsEl = $('#docs'), docsBody = $('#docs-body'), docsBtn = $('#docs-btn');
+  let docsAll = [], docsUrl = '';
+  const famCode = () => { try { return localStorage.getItem('trip27-code') || ''; } catch (e) { return ''; } };
+
+  function docsAsk(note) {
+    docsBody.innerHTML = `<p class="docs-msg">${note || 'כדי לפתוח את התיקייה, הקלידו את קוד המשפחה:'}</p>
+      <form class="ai-form docs-form" id="docs-form"><input id="docs-code" type="password" inputmode="numeric" placeholder="קוד המשפחה" autocomplete="off" aria-label="קוד המשפחה"><button type="submit" aria-label="כניסה">↑</button></form>`;
+    $('#docs-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const c = $('#docs-code').value.trim();
+      if (!c) return;
+      try { localStorage.setItem('trip27-code', c); } catch (err) {}
+      docsList();
+    });
+    setTimeout(() => $('#docs-code').focus(), 60);
+  }
+
+  async function docsFetch(path, payload) {
+    const r = await fetch(T.aiEndpoint + path, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Family-Code': famCode() }, body: JSON.stringify(payload || {})
+    });
+    if (r.status === 401) { try { localStorage.removeItem('trip27-code'); } catch (e) {} throw new Error('code'); }
+    if (r.status === 429) throw new Error('locked');
+    if (!r.ok) throw new Error('net');
+    return r;
+  }
+
+  function docsError(err) {
+    if (err.message === 'code') return docsAsk('הקוד לא נכון 🙈 נסו שוב:');
+    docsBody.innerHTML = `<p class="docs-msg">${err.message === 'locked'
+      ? 'היו יותר מדי ניסיונות עם קוד שגוי מהמכשיר הזה. אפשר לנסות שוב מחר.'
+      : 'לא הצלחתי להביא את המסמכים. בדקו את החיבור לאינטרנט ונסו שוב.'}</p>`;
+  }
+
+  function docsRender() {
+    const groups = [...new Set(docsAll.map(d => d.group))];
+    docsBody.innerHTML = docsAll.length ? groups.map(g => `<h3 class="docs-group">${esc(g)}</h3><ul class="docs-list">${
+      docsAll.filter(d => d.group === g).map(d => `<li><button type="button" data-id="${esc(d.id)}"><span class="ic" aria-hidden="true">${
+        d.type.startsWith('image/') ? '🖼️' : '📄'}</span><span><b>${esc(d.title)}</b><small>${esc(d.note || '')}</small></span></button></li>`).join('')
+    }</ul>`).join('') : '<p class="docs-msg">עוד אין מסמכים בתיקייה.</p>';
+  }
+
+  async function docsList() {
+    if (!famCode()) return docsAsk();
+    docsBody.innerHTML = '<p class="docs-msg">טוען…</p>';
+    try {
+      docsAll = (await (await docsFetch('/docs')).json()).docs || [];
+      docsRender();
+    } catch (err) { docsError(err); }
+  }
+
+  // A file arrives as a blob; images show inline, and both kinds get open and save buttons.
+  async function docsShow(id) {
+    const d = docsAll.find(x => x.id === id);
+    if (!d) return;
+    docsBody.innerHTML = '<p class="docs-msg">פותח…</p>';
+    try {
+      const blob = await (await docsFetch('/docs/file', { id })).blob();
+      if (docsUrl) URL.revokeObjectURL(docsUrl);
+      docsUrl = URL.createObjectURL(blob);
+      const name = d.id + (d.type === 'application/pdf' ? '.pdf' : '.jpg');
+      docsBody.innerHTML = `<button type="button" class="docs-back" id="docs-back">→ כל המסמכים</button>
+        <h3 class="docs-title">${esc(d.title)}</h3><p class="docs-note">${esc(d.note || '')}</p>
+        ${d.type.startsWith('image/') ? `<img class="docs-img" src="${docsUrl}" alt="${esc(d.title)}">` : ''}
+        <div class="docs-actions"><a href="${docsUrl}" target="_blank" rel="noopener">פתיחה</a><a href="${docsUrl}" download="${esc(name)}">שמירה במכשיר</a></div>`;
+      $('#docs-back').addEventListener('click', docsRender);
+    } catch (err) { docsError(err); }
+  }
+
+  function docsOpen() {
+    docsEl.classList.add('open');
+    docsEl.setAttribute('aria-hidden', 'false');
+    docsList();
+  }
+  function docsClose() {
+    docsEl.classList.remove('open');
+    docsEl.setAttribute('aria-hidden', 'true');
+    docsBtn.focus();
+  }
+  docsBtn.addEventListener('click', docsOpen);
+  $('#docs-close').addEventListener('click', docsClose);
+  docsEl.addEventListener('click', e => { if (e.target === docsEl) docsClose(); });
+  docsBody.addEventListener('click', e => { const b = e.target.closest('[data-id]'); if (b) docsShow(b.dataset.id); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && docsEl.classList.contains('open')) docsClose(); });
+
   // AI ASSISTANT
   const fab = $('#ai-fab'), panel = $('#ai-panel'), body = $('#ai-body'), input = $('#ai-input');
   const history = [];
