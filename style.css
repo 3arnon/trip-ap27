@@ -435,6 +435,17 @@ h2 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(
 .docs-actions a { padding: 10px 18px; border-radius: 999px; background: var(--lagoon); color: #fff; font-weight: 700; font-size: 15px; text-decoration: none; }
 .docs-actions a + a { background: var(--mist); color: var(--sea); border: 1px solid var(--line); }
 
+/* PACKING LIST: the 📋 dialog, built on the documents dialog */
+.pack-bar { height: 6px; border-radius: 999px; background: var(--mist); overflow: hidden; margin: 0 0 18px; }
+.pack-bar i { display: block; height: 100%; width: 0; background: var(--jungle); transition: width .3s; }
+.pack-group { display: flex; align-items: baseline; gap: 8px; margin: 0 0 4px; font-size: 16px; font-weight: 800; }
+.pack-group small { margin-inline-start: auto; font-size: 13px; font-weight: 700; color: var(--sea-2); }
+.pack-list { margin: 0 0 22px; }
+.pack-list label { gap: 12px; padding: 10px 0; font-size: 16px; }
+.pack-list input { width: 22px; height: 22px; border-radius: 7px; }
+.pack-list input:checked::after { font-size: 13px; }
+.pack-reset { display: block; margin: 4px auto 6px; border: 1px solid var(--line); border-radius: 999px; background: var(--mist); color: var(--sea-2); font: inherit; font-size: 14px; padding: 8px 16px; cursor: pointer; }
+
 /* RESPONSIVE */
 @media (max-width: 860px) {
   .journey { grid-template-columns: 1fr; gap: 34px; }

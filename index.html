@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Suez+One&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=13">
+<link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
 
@@ -26,6 +26,7 @@
       <a href="#hotels">מלונות</a>
       <a href="#book">להזמין</a>
     </nav>
+    <button class="docs-btn" id="pack-btn" type="button" aria-haspopup="dialog" aria-label="רשימת ציוד" title="רשימת ציוד">📋</button>
     <button class="docs-btn" id="docs-btn" type="button" aria-haspopup="dialog" aria-label="מסמכי הטיול" title="מסמכי הטיול">📂</button>
   </div>
 </header>
@@ -204,8 +205,18 @@
   </div>
 </div>
 
+<div class="docs" id="pack" role="dialog" aria-modal="true" aria-label="רשימת ציוד" aria-hidden="true">
+  <div class="docs-card">
+    <div class="ai-head">
+      <div class="ai-title"><span class="ai-mini" aria-hidden="true">📋</span><div><b>רשימת ציוד</b><small id="pack-count">מסמנים מה שנארז. נשמר בטלפון הזה</small></div></div>
+      <button class="ai-close" id="pack-close" aria-label="סגירה">✕</button>
+    </div>
+    <div class="docs-body" id="pack-body"></div>
+  </div>
+</div>
+
 <!-- Bump ?v= on each update so phones don't keep an old copy. -->
-<script src="data.js?v=13"></script>
-<script src="app.js?v=13"></script>
+<script src="data.js?v=14"></script>
+<script src="app.js?v=14"></script>
 </body>
 </html>

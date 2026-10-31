@@ -408,6 +408,60 @@
     try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) {}
   });
 
+  // PACKING LIST: the 📋 in the nav. Ticks are kept on this device, keyed by the item text,
+  // so adding or reordering items never moves a tick to the wrong line.
+  const packEl = $('#pack'), packBody = $('#pack-body'), packBtn = $('#pack-btn');
+  const PACK_KEY = 'trip27-pack';
+  let packed = {};
+  try { packed = JSON.parse(localStorage.getItem(PACK_KEY)) || {}; } catch (e) {}
+  const packAll = T.packing.flatMap(g => g.items);
+
+  function packCount() {
+    const n = packAll.filter(t => packed[t]).length;
+    $('#pack-count').textContent = `נארזו ${n} מתוך ${packAll.length}. נשמר בטלפון הזה`;
+    $('#pack-bar').style.width = (100 * n / packAll.length) + '%';
+    packBody.querySelectorAll('[data-g]').forEach(el => {
+      const g = T.packing[el.dataset.g];
+      el.textContent = `${g.items.filter(t => packed[t]).length}/${g.items.length}`;
+    });
+  }
+  packBody.innerHTML = '<div class="pack-bar"><i id="pack-bar"></i></div>' + T.packing.map((g, gi) =>
+    `<h3 class="pack-group"><span aria-hidden="true">${g.ic}</span>${esc(g.t)}<small data-g="${gi}"></small></h3>
+    <ul class="checklist pack-list">${g.items.map((t, ii) =>
+      `<li><label><input type="checkbox" data-k="${gi}.${ii}"${packed[t] ? ' checked' : ''}><span>${esc(t)}</span></label></li>`).join('')}</ul>`
+  ).join('') + '<button type="button" class="pack-reset" id="pack-reset">ניקוי כל הסימונים</button>';
+  packCount();
+
+  packBody.addEventListener('change', e => {
+    const k = e.target.dataset.k;
+    if (!k) return;
+    const [gi, ii] = k.split('.');
+    const t = T.packing[gi].items[ii];
+    if (e.target.checked) packed[t] = true; else delete packed[t];
+    try { localStorage.setItem(PACK_KEY, JSON.stringify(packed)); } catch (err) {}
+    packCount();
+  });
+  $('#pack-reset').addEventListener('click', () => {
+    if (!confirm('לנקות את כל הסימונים ברשימת הציוד?')) return;
+    packed = {};
+    try { localStorage.removeItem(PACK_KEY); } catch (err) {}
+    packBody.querySelectorAll('input[data-k]').forEach(i => { i.checked = false; });
+    packCount();
+  });
+  function packOpen() {
+    packEl.classList.add('open');
+    packEl.setAttribute('aria-hidden', 'false');
+  }
+  function packClose() {
+    packEl.classList.remove('open');
+    packEl.setAttribute('aria-hidden', 'true');
+    packBtn.focus();
+  }
+  packBtn.addEventListener('click', packOpen);
+  $('#pack-close').addEventListener('click', packClose);
+  packEl.addEventListener('click', e => { if (e.target === packEl) packClose(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && packEl.classList.contains('open')) packClose(); });
+
   // DOCUMENTS: the 📂 in the nav. The files live on the assistant's worker and come back only with
   // the family code (the same code Koko asks for, kept under the same key on this device).
   const docsEl = $('#docs'), docsBody = $('#docs-body'), docsBtn = $('#docs-btn');
