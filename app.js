@@ -397,8 +397,11 @@
   const KEY = 'trip27-checks';
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) {}
-  $('#checklist').innerHTML = T.checklist.map((t, i) =>
-    `<li><label><input type="checkbox" data-i="${i}"${saved[i] ? ' checked' : ''}><span>${esc(t)}</span></label></li>`).join('');
+  // An item starting with ✅ is already booked: shown ticked and locked.
+  $('#checklist').innerHTML = T.checklist.map((t, i) => {
+    const done = t.startsWith('✅');
+    return `<li><label><input type="checkbox" data-i="${i}"${done || saved[i] ? ' checked' : ''}${done ? ' disabled' : ''}><span>${esc(done ? t.slice(1).trim() : t)}</span></label></li>`;
+  }).join('');
   $('#checklist').addEventListener('change', e => {
     if (!e.target.dataset.i) return;
     saved[e.target.dataset.i] = e.target.checked;
