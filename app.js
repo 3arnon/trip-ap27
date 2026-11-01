@@ -462,6 +462,42 @@
   packEl.addEventListener('click', e => { if (e.target === packEl) packClose(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && packEl.classList.contains('open')) packClose(); });
 
+  // TO BOOK: the red ✓ in the nav. Open items by date and time; a row opens to the details and the booking link.
+  const todoEl = $('#todo'), todoBody = $('#todo-body'), todoBtn = $('#todo-btn');
+  const WD = ['א׳', 'ב׳', 'ג׳', 'ד׳', 'ה׳', 'ו׳', 'ש׳'];
+  const todoRow = x => {
+    const dt = new Date(x.d + 'T12:00:00');
+    return `<li><details class="todo-item"><summary>
+      <span class="todo-date"><b>${dt.getDate()}.${dt.getMonth() + 1}</b><small>יום ${WD[dt.getDay()]}</small></span>
+      <span class="todo-what"><small>${esc(x.t)}</small><b><span aria-hidden="true">${x.ic}</span> ${esc(x.name)}</b></span>
+    </summary><div class="todo-more">
+      <p>${esc(x.about)}</p>
+      ${x.how ? `<p class="todo-how">${esc(x.how)}</p>` : ''}
+      ${x.url ? `<div class="docs-actions"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.go || 'לאתר')}</a>${x.pre ? '<span class="todo-pre">התאריך כבר מוזן</span>' : ''}</div>` : ''}
+    </div></details></li>`;
+  };
+  const todoOpen = T.todo.filter(x => !x.done).sort((a, b) => a.d.localeCompare(b.d));
+  const todoDone = T.todo.filter(x => x.done).sort((a, b) => a.d.localeCompare(b.d));
+  $('#todo-badge').textContent = todoOpen.length || '';
+  $('#todo-count').textContent = todoOpen.length
+    ? `${todoOpen.length} דברים פתוחים, לפי תאריך. לוחצים על שורה לפרטים ולקישור`
+    : 'הכל סגור 🎉';
+  todoBody.innerHTML = `<ul class="todo-list">${todoOpen.map(todoRow).join('')}</ul>` + (todoDone.length
+    ? `<h3 class="docs-group">✅ כבר סגור</h3><ul class="todo-list todo-done">${todoDone.map(todoRow).join('')}</ul>` : '');
+  function todoShow() {
+    todoEl.classList.add('open');
+    todoEl.setAttribute('aria-hidden', 'false');
+  }
+  function todoHide() {
+    todoEl.classList.remove('open');
+    todoEl.setAttribute('aria-hidden', 'true');
+    todoBtn.focus();
+  }
+  todoBtn.addEventListener('click', todoShow);
+  $('#todo-close').addEventListener('click', todoHide);
+  todoEl.addEventListener('click', e => { if (e.target === todoEl) todoHide(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && todoEl.classList.contains('open')) todoHide(); });
+
   // DOCUMENTS: the 📂 in the nav. The files live on the assistant's worker and come back only with
   // the family code (the same code Koko asks for, kept under the same key on this device).
   const docsEl = $('#docs'), docsBody = $('#docs-body'), docsBtn = $('#docs-btn');
