@@ -79,6 +79,10 @@ window.TRIP = {
   // TO BOOK, the red ✓ in the nav: what is still open, by date. The same for everyone (not per device).
   // done: true moves an item to the closed list. pre: true means the link opens with the date already filled in.
   todo: [
+    { d: '2027-04-02', t: 'צ׳ק־אין', name: 'מלון בבנגקוק ליעקב וטלי', ic: '🏨', pre: true,
+      about: 'חמישה לילות, 2–7.4, לפני שהם מצטרפים אלינו בקוסמוי. חדר אחד לשניים',
+      how: 'הקישור פותח את Booking על התאריכים הנכונים לזוג. כדאי לבחור באזור Sukhumvit או ליד הנהר, עם ציון 9 ומעלה, מעלית וביטול חינם. ב־7.4 הם ממשיכים לקוסמוי, אז כדאי שהמלון יארגן הסעה לשדה התעופה או שיהיה קרוב לרכבת לשדה',
+      url: 'https://www.booking.com/searchresults.html?ss=Bangkok&checkin=2027-04-02&checkout=2027-04-07&group_adults=2&group_children=0&no_rooms=1', go: 'לחיפוש ב־Booking' },
     { d: '2027-04-07', t: 'כל הטיול', name: 'שני מיניוואנים עם נהגים', ic: '🚐',
       about: 'נהג קבוע לכל משפחה, לכל הימים ולכל המעברים. לפוקט ולקאו לאק ביקשנו הצעה מאדם, נהג פרטי בפוקט, ומחכים לתשובה. לקוסמוי עוד אין נהג',
       how: 'מתנהל בקבוצת הוואטסאפ. כשאדם יענה, נעדכן שם' },
